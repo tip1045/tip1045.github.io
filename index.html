@@ -88,44 +88,48 @@ function categories(){
 function drawFilters(){
  const box=document.getElementById("filters");
  box.replaceChildren();
- const help=document.createElement("span");
- help.className="muted";
- help.textContent="Selecciona una o diverses seccions per desplegar-ne les infraccions.";
- box.appendChild(help);
- if(selectedCategories.size){
-   const closeButton=document.createElement("button");
-   closeButton.className="filter";
-   closeButton.textContent="Tancar totes";
-   closeButton.addEventListener("click",clearCategories);
-   box.appendChild(closeButton);
- }
+ const allButton=document.createElement("button");
+ const allActive=selectedCategories.size===0;
+ allButton.className=`filter ${allActive?"active":""}`;
+ allButton.textContent="Totes";
+ allButton.setAttribute("aria-pressed",String(allActive));
+ allButton.addEventListener("click",clearCategories);
+ box.appendChild(allButton);
+ categories().forEach(c=>{
+   const button=document.createElement("button");
+   const active=selectedCategories.has(c);
+   button.className=`filter ${active?"active":""}`;
+   button.textContent=c;
+   button.setAttribute("aria-pressed",String(active));
+   button.addEventListener("click",()=>toggleCategory(c));
+   box.appendChild(button);
+ });
 }
 function toggleCategory(c){
- if(selectedCategories.has(c)) selectedCategories.delete(c);
- else selectedCategories.add(c);
+ if(selectedCategories.has(c)) selectedCategories.clear();
+ else{
+   selectedCategories.clear();
+   selectedCategories.add(c);
+ }
  drawFilters();
  renderResults();
 }
 function clearCategories(){selectedCategories.clear();drawFilters();renderResults()}
-function toggleCategoryByIndex(i){toggleCategory(categories()[i])}
 function toggleDetail(i){document.getElementById("detail-"+i).classList.toggle("open")}
 function renderResults(){
  const q=normalize(document.getElementById("search").value.trim());
  const filtered=DATA.filter(x=>{
    const hay=normalize(`${x.article} ${x.text} ${x.severity} ${x.category} ${x.summary}`);
-   return !q||hay.includes(q);
+   return (selectedCategories.size===0||selectedCategories.has(x.category)) && (!q||hay.includes(q));
  });
- const visibleCount=q?filtered.length:DATA.filter(x=>selectedCategories.has(x.category)).length;
- document.getElementById("count").textContent=selectedCategories.size||q?`${visibleCount} infraccions visibles`:`${DATA.length} infraccions en total`;
+ document.getElementById("count").textContent=`${filtered.length} infraccions`;
  const root=document.getElementById("results");
  if(!filtered.length){root.innerHTML='<div class="empty">No s’han trobat infraccions amb aquests criteris.</div>';return}
  const groups=[...new Set(filtered.map(x=>x.category))].sort((a,b)=>a.localeCompare(b,"ca"));
  let n=0;
  root.innerHTML=groups.map(g=>{
    const rows=filtered.filter(x=>x.category===g).sort((a,b)=>Number(a.article)-Number(b.article));
-   const categoryIndex=categories().indexOf(g);
-   const open=selectedCategories.has(g)||Boolean(q);
-   const content=open?rows.map(x=>{
+   const content=rows.map(x=>{
      const id=n++;
      return `<div class="infraction">
        <div class="infraction-head" onclick="toggleDetail(${id})">
@@ -138,14 +142,8 @@ function renderResults(){
          <div class="legal-note">Aquest resum és una ajuda de consulta i no substitueix el text literal de l’ordenança. Comprova el redactat vigent abans de denunciar.</div>
        </div>
      </div>`;
-   }).join(""):"";
-   return `<div class="group">
-     <button class="group-toggle ${open?"active":""}" onclick="toggleCategoryByIndex(${categoryIndex})" aria-expanded="${open}">
-       <span class="group-name">${g}</span>
-       <span class="group-info"><span>${rows.length} infraccions</span><span class="chevron">▼</span></span>
-     </button>
-     <div class="group-content">${content}</div>
-   </div>`;
+   }).join("");
+   return `<div class="group"><h3 class="group-title">${g}</h3>${content}</div>`;
  }).join("");
 }
 function render(){drawFilters();renderResults()}
