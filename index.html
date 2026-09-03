@@ -84,8 +84,21 @@ function categories(){
 function drawFilters(){
  const box=document.getElementById("filters");
  const allActive=selectedCategories.size===0;
- box.innerHTML=`<button class="filter ${allActive?"active":""}" onclick="clearCategories()" aria-pressed="${allActive}">Totes</button>`+
-   categories().map(c=>`<button class="filter ${selectedCategories.has(c)?"active":""}" onclick="toggleCategory(${JSON.stringify(c)})" aria-pressed="${selectedCategories.has(c)}">${c}</button>`).join("");
+ box.replaceChildren();
+ const allButton=document.createElement("button");
+ allButton.className=`filter ${allActive?"active":""}`;
+ allButton.textContent="Totes";
+ allButton.setAttribute("aria-pressed",String(allActive));
+ allButton.addEventListener("click",clearCategories);
+ box.appendChild(allButton);
+ categories().forEach(c=>{
+   const button=document.createElement("button");
+   button.className=`filter ${selectedCategories.has(c)?"active":""}`;
+   button.textContent=c;
+   button.setAttribute("aria-pressed",String(selectedCategories.has(c)));
+   button.addEventListener("click",()=>toggleCategory(c));
+   box.appendChild(button);
+ });
 }
 function toggleCategory(c){
  if(selectedCategories.has(c)) selectedCategories.delete(c);
