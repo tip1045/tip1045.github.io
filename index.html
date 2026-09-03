@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html lang="ca">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>PL Alella · TIP 1045</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f3f5f7;
+      color: #1f2937;
+    }
+
+    header {
+      background: #172554;
+      color: white;
+      padding: 24px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 26px;
+      margin-bottom: 5px;
+    }
+
+    header p {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+
+    .search-box {
+      margin-bottom: 25px;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 15px 18px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 16px;
+      background: white;
+      outline: none;
+    }
+
+    .search-box input:focus {
+      border-color: #172554;
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .menu-card {
+      background: white;
+      border-radius: 12px;
+      padding: 25px;
+      cursor: pointer;
+      border: 1px solid #e5e7eb;
+      transition: 0.2s;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    }
+
+    .menu-card h2 {
+      color: #172554;
+      margin-bottom: 8px;
+      font-size: 21px;
+    }
+
+    .menu-card p {
+      color: #6b7280;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .section {
+      display: none;
+      margin-top: 25px;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .section h2 {
+      color: #172554;
+      margin-bottom: 10px;
+    }
+
+    .section p {
+      color: #6b7280;
+    }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 20px;
+      color: #172554;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 13px;
+      padding: 40px 20px;
+    }
+
+    @media (max-width: 650px) {
+      .menu {
+        grid-template-columns: 1fr;
+      }
+
+      header h1 {
+        font-size: 22px;
+      }
+
+      .container {
+        margin-top: 20px;
+      }
+    }
+  </style>
+
+</head>
+
+<body>
+
+<header>
+  <h1>PL Alella · TIP 1045</h1>
+  <p>Consulta ràpida de normativa municipal</p>
+</header>
+
+<main class="container">
+
+  <div id="mainMenu">
+
+```
+<div class="search-box">
+  <input
+    type="text"
+    id="search"
+    placeholder="Cercar article, infracció, paraula clau..."
+  >
+</div>
+
+<div class="menu">
+
+  <div class="menu-card" onclick="openSection('omc')">
+    <h2>OMC</h2>
+    <p>
+      Ordenança Municipal de Civisme d'Alella
+    </p>
+  </div>
+
+  <div class="menu-card" onclick="openSection('animals')">
+    <h2>OM Animals</h2>
+    <p>
+      Ordenança municipal relativa als animals domèstics d'Alella
+    </p>
+  </div>
+
+</div>
+```
+
+  </div>
+
+  <section id="omc" class="section">
+
+```
+<span class="back" onclick="goBack()">← Tornar</span>
+
+<h2>OMC</h2>
+
+<p>
+  Ordenança Municipal de Civisme d'Alella.
+</p>
+
+<br>
+
+<p>
+  Aquí incorporarem les infraccions, articles, classificació
+  i imports corresponents.
+</p>
+```
+
+  </section>
+
+  <section id="animals" class="section">
+
+```
+<span class="back" onclick="goBack()">← Tornar</span>
+
+<h2>OM Animals</h2>
+
+<p>
+  Ordenança municipal relativa als animals domèstics d'Alella.
+</p>
+
+<br>
+
+<p>
+  Aquí incorporarem les infraccions relacionades amb gossos,
+  animals domèstics, obligacions dels propietaris i sancions.
+</p>
+```
+
+  </section>
+
+</main>
+
+<footer>
+  TIP 1045 · Eina de consulta
+</footer>
+
+<script>
+
+function openSection(sectionId) {
+
+  document.getElementById("mainMenu").style.display = "none";
+
+  document.querySelectorAll(".section").forEach(function(section) {
+    section.style.display = "none";
+  });
+
+  document.getElementById(sectionId).style.display = "block";
+
+}
+
+
+function goBack() {
+
+  document.querySelectorAll(".section").forEach(function(section) {
+    section.style.display = "none";
+  });
+
+  document.getElementById("mainMenu").style.display = "block";
+
+}
+
+</script>
+
+</body>
+</html>
