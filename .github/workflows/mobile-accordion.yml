@@ -1,0 +1,101 @@
+name: Apply mobile accordion layout
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch-mobile-layout:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Patch index.html safely
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text(encoding='utf-8')
+          marker='<!-- MOBILE_ACCORDION_V1 -->'
+          if marker in s:
+              print('Mobile accordion already applied')
+              raise SystemExit(0)
+          addon=r'''
+<!-- MOBILE_ACCORDION_V1 -->
+<style>
+@media (max-width:700px){
+  /* Mòbil: mantenim el cercador però substituïm les bombolles per grups plegables */
+  #omc .filters,#animals .filters{display:none!important}
+  #omc .toolbar,#animals .toolbar{position:static;padding:0;background:transparent;border:0;box-shadow:none;margin-bottom:12px}
+  #omc .search,#animals .search{margin-bottom:6px;background:#fff}
+  #omc .count,#animals .count{text-align:right;margin:6px 2px 12px}
+  #omc .group,#animals .group{margin:10px 0}
+  #omc .group-title,#animals .group-title{display:none}
+  .mobile-group-toggle{width:100%;border:1px solid #dfe4ea;background:#fff;border-radius:12px;padding:15px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#172554;text-align:left;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+  .mobile-group-toggle.active{background:#eef2ff;border-color:#172554}
+  .mobile-group-name{font-size:17px;font-weight:800;line-height:1.25}
+  .mobile-group-info{display:flex;align-items:center;gap:10px;color:#667085;font-size:13px;white-space:nowrap}
+  .mobile-group-count{background:#edf2ff;color:#223b82;border-radius:999px;padding:5px 9px;font-weight:800}
+  .mobile-group-chevron{font-size:16px;transition:transform .2s}
+  .mobile-group-toggle.active .mobile-group-chevron{transform:rotate(180deg)}
+  .mobile-group-content{display:none;margin-top:8px}
+  .mobile-group-content.open{display:block}
+  .infraction-head{grid-template-columns:1fr}
+  .meta{justify-content:flex-start}
+}
+@media (min-width:701px){.mobile-group-toggle{display:none!important}.mobile-group-content{display:block!important}}
+</style>
+<script>
+(function(){
+  const desktopRenderResults=renderResults;
+  const isMobile=()=>window.matchMedia('(max-width:700px)').matches;
+  const mobileOpenGroups={omc:new Set(),animals:new Set()};
+
+  function toggleMobileGroup(id,key){
+    const set=mobileOpenGroups[id];
+    set.has(key)?set.delete(key):set.add(key);
+    mobileRenderResults(id);
+  }
+  window.toggleMobileGroup=toggleMobileGroup;
+
+  function mobileRenderResults(id){
+    if(!isMobile()){desktopRenderResults(id);return}
+    const cfg=CONFIG[id], q=normalize(document.getElementById(cfg.search).value.trim());
+    const filtered=cfg.data.filter(x=>{const hay=normalize(`${x.article} ${x.text} ${x.severity} ${x.category} ${x.keywords||''}`);return !q||hay.includes(q)});
+    document.getElementById(cfg.count).textContent=`${filtered.length} infraccions`;
+    const root=document.getElementById(cfg.results);
+    if(!filtered.length){root.innerHTML='<div class="empty">No s’han trobat infraccions amb aquests criteris.</div>';return}
+    const groups=[...new Set(filtered.map(x=>x.category))].sort((a,b)=>a.localeCompare(b,'ca'));
+    let n=0;
+    root.innerHTML=groups.map((g,gi)=>{
+      const rows=filtered.filter(x=>x.category===g).sort((a,b)=>String(a.article).localeCompare(String(b.article),'ca',{numeric:true}));
+      const key=normalize(g).replace(/[^a-z0-9]+/g,'-')+'-'+gi;
+      /* En una cerca obrim automàticament els grups amb coincidències; sense cerca, tots comencen tancats. */
+      const open=q?true:mobileOpenGroups[id].has(key);
+      const content=rows.map(x=>{const detailId=`detail-${id}-m-${n++}`;return `<div class="infraction"><div class="infraction-head" onclick="toggleDetail('${detailId}')"><div class="art">Art. ${escapeHTML(x.article)}</div><div class="statement">${escapeHTML(x.text)}</div><div class="meta"><span class="badge ${severityClass(x.severity)}">${x.severity}</span><span class="badge money">mín. ${Number(x.min).toLocaleString('ca-ES',{minimumFractionDigits:Number(x.min)%1?2:0,maximumFractionDigits:2})} €</span></div></div><div class="detail" id="${detailId}"><strong>Significat pràctic i elements a comprovar</strong><p>${escapeHTML(x.guidance)}</p>${x.regime?`<div class="legal-source">Règim aplicable: ${escapeHTML(x.regime)}</div>`:''}<div class="legal-box"><strong>Text literal que tipifica la conducta</strong><blockquote>«${escapeHTML(x.legal)}»</blockquote><div class="legal-source">${escapeHTML(x.legalSource)}</div>${x.legalContext?`<div class="legal-caveat">${escapeHTML(x.legalContext)}</div>`:''}${x.legalCaveat?`<div class="legal-caveat">${escapeHTML(x.legalCaveat)}</div>`:''}</div><div class="legal-note">Ajuda de consulta operativa. Verifica sempre el text oficial vigent, la normativa sectorial aplicable i la competència sancionadora. <a href="${cfg.official}" target="_blank" rel="noopener">Consultar la font oficial</a>.</div></div></div>`}).join('');
+      return `<div class="group"><button class="mobile-group-toggle ${open?'active':''}" onclick="toggleMobileGroup('${id}','${key}')"><span class="mobile-group-name">${escapeHTML(g)}</span><span class="mobile-group-info"><span class="mobile-group-count">${rows.length}</span><span class="mobile-group-chevron">▼</span></span></button><div class="mobile-group-content ${open?'open':''}">${content}</div></div>`;
+    }).join('');
+  }
+
+  renderResults=function(id){isMobile()?mobileRenderResults(id):desktopRenderResults(id)};
+  window.addEventListener('resize',()=>{
+    const visible=Object.keys(CONFIG).find(id=>document.getElementById(id).style.display==='block');
+    if(visible) render(visible);
+  });
+})();
+</script>
+'''
+          s=s.replace('</body>', addon+'\n</body>')
+          p.write_text(s,encoding='utf-8')
+          PY
+      - name: Commit responsive mobile layout
+        run: |
+          if git diff --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html
+          git commit -m "Improve mobile navigation with collapsed topic accordions"
+          git push
