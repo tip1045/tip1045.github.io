@@ -1,97 +1,21 @@
 name: Apply mobile accordion layout
-
 on:
   push:
     branches: [main]
   workflow_dispatch:
-
 permissions:
   contents: write
-
 jobs:
-  patch-mobile-layout:
+  patch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Patch index.html safely
+      - name: Apply mobile layout
+        env:
+          MOBILE_ADDON_B64: PCEtLSBNT0JJTEVfQUNDT1JESU9OX1YxIC0tPgo8c3R5bGU+CkBtZWRpYSAobWF4LXdpZHRoOjcwMHB4KXsKI29tYyAuZmlsdGVycywjYW5pbWFscyAuZmlsdGVyc3tkaXNwbGF5Om5vbmUhaW1wb3J0YW50fQojb21jIC50b29sYmFyLCNhbmltYWxzIC50b29sYmFye3Bvc2l0aW9uOnN0YXRpYztwYWRkaW5nOjA7YmFja2dyb3VuZDp0cmFuc3BhcmVudDtib3JkZXI6MDtib3gtc2hhZG93Om5vbmU7bWFyZ2luLWJvdHRvbToxMnB4fQojb21jIC5jb3VudCwjYW5pbWFscyAuY291bnR7dGV4dC1hbGlnbjpyaWdodDttYXJnaW46NnB4IDJweCAxMnB4fQojb21jIC5ncm91cCwjYW5pbWFscyAuZ3JvdXB7bWFyZ2luOjEwcHggMH0KI29tYyAuZ3JvdXAtdGl0bGUsI2FuaW1hbHMgLmdyb3VwLXRpdGxle2Rpc3BsYXk6bm9uZX0KLm1vYmlsZS1ncm91cC10b2dnbGV7d2lkdGg6MTAwJTtib3JkZXI6MXB4IHNvbGlkICNkZmU0ZWE7YmFja2dyb3VuZDojZmZmO2JvcmRlci1yYWRpdXM6MTJweDtwYWRkaW5nOjE1cHggMTZweDtkaXNwbGF5OmZsZXg7YWxpZ24taXRlbXM6Y2VudGVyO2p1c3RpZnktY29udGVudDpzcGFjZS1iZXR3ZWVuO2dhcDoxMnB4O2NvbG9yOiMxNzI1NTQ7dGV4dC1hbGlnbjpsZWZ0O2JveC1zaGFkb3c6MCAycHggOHB4IHJnYmEoMCwwLDAsLjAzKX0KLm1vYmlsZS1ncm91cC10b2dnbGUuYWN0aXZle2JhY2tncm91bmQ6I2VlZjJmZjtib3JkZXItY29sb3I6IzE3MjU1NH0KLm1vYmlsZS1ncm91cC1uYW1le2ZvbnQtc2l6ZToxN3B4O2ZvbnQtd2VpZ2h0OjgwMH0KLm1vYmlsZS1ncm91cC1pbmZve2Rpc3BsYXk6ZmxleDthbGlnbi1pdGVtczpjZW50ZXI7Z2FwOjEwcHg7Y29sb3I6IzY2NzA4NX0KLm1vYmlsZS1ncm91cC1jb3VudHtiYWNrZ3JvdW5kOiNlZGYyZmY7Y29sb3I6IzIyM2I4Mjtib3JkZXItcmFkaXVzOjk5OXB4O3BhZGRpbmc6NXB4IDlweDtmb250LXdlaWdodDo4MDB9Ci5tb2JpbGUtZ3JvdXAtY29udGVudHtkaXNwbGF5Om5vbmU7bWFyZ2luLXRvcDo4cHh9Lm1vYmlsZS1ncm91cC1jb250ZW50Lm9wZW57ZGlzcGxheTpibG9ja30KfQpAbWVkaWEgKG1pbi13aWR0aDo3MDFweCl7Lm1vYmlsZS1ncm91cC10b2dnbGV7ZGlzcGxheTpub25lIWltcG9ydGFudH0ubW9iaWxlLWdyb3VwLWNvbnRlbnR7ZGlzcGxheTpibG9jayFpbXBvcnRhbnR9fQo8L3N0eWxlPgo8c2NyaXB0PgooZnVuY3Rpb24oKXsKY29uc3QgZGVza3RvcFJlbmRlclJlc3VsdHM9cmVuZGVyUmVzdWx0cyxpc01vYmlsZT0oKT0+bWF0Y2hNZWRpYSgnKG1heC13aWR0aDo3MDBweCknKS5tYXRjaGVzLG9wZW5Hcm91cHM9e29tYzpuZXcgU2V0KCksYW5pbWFsczpuZXcgU2V0KCl9Owp3aW5kb3cudG9nZ2xlTW9iaWxlR3JvdXA9KGlkLGtleSk9Pntjb25zdCBzPW9wZW5Hcm91cHNbaWRdO3MuaGFzKGtleSk/cy5kZWxldGUoa2V5KTpzLmFkZChrZXkpO21vYmlsZVJlbmRlclJlc3VsdHMoaWQpfTsKZnVuY3Rpb24gY2FyZChpZCx4LG4sY2ZnKXtjb25zdCBkPWBkZXRhaWwtJHtpZH0tbS0ke259YDtyZXR1cm4gYDxkaXYgY2xhc3M9ImluZnJhY3Rpb24iPjxkaXYgY2xhc3M9ImluZnJhY3Rpb24taGVhZCIgb25jbGljaz0idG9nZ2xlRGV0YWlsKCcke2R9JykiPjxkaXYgY2xhc3M9ImFydCI+QXJ0LiAke2VzY2FwZUhUTUwoeC5hcnRpY2xlKX08L2Rpdj48ZGl2IGNsYXNzPSJzdGF0ZW1lbnQiPiR7ZXNjYXBlSFRNTCh4LnRleHQpfTwvZGl2PjxkaXYgY2xhc3M9Im1ldGEiPjxzcGFuIGNsYXNzPSJiYWRnZSAke3NldmVyaXR5Q2xhc3MoeC5zZXZlcml0eSl9Ij4ke3guc2V2ZXJpdHl9PC9zcGFuPjxzcGFuIGNsYXNzPSJiYWRnZSBtb25leSI+bcOtbi4gJHtOdW1iZXIoeC5taW4pLnRvTG9jYWxlU3RyaW5nKCdjYS1FUycse21pbmltdW1GcmFjdGlvbkRpZ2l0czpOdW1iZXIoeC5taW4pJTE/MjowLG1heGltdW1GcmFjdGlvbkRpZ2l0czoyfSl9IOKCrDwvc3Bhbj48L2Rpdj48L2Rpdj48ZGl2IGNsYXNzPSJkZXRhaWwiIGlkPSIke2R9Ij48c3Ryb25nPlNpZ25pZmljYXQgcHLDoGN0aWMgaSBlbGVtZW50cyBhIGNvbXByb3Zhcjwvc3Ryb25nPjxwPiR7ZXNjYXBlSFRNTCh4Lmd1aWRhbmNlKX08L3A+JHt4LnJlZ2ltZT9gPGRpdiBjbGFzcz0ibGVnYWwtc291cmNlIj5Sw6hnaW0gYXBsaWNhYmxlOiAke2VzY2FwZUhUTUwoeC5yZWdpbWUpfTwvZGl2PmA6Jyd9PGRpdiBjbGFzcz0ibGVnYWwtYm94Ij48c3Ryb25nPlRleHQgbGl0ZXJhbCBxdWUgdGlwaWZpY2EgbGEgY29uZHVjdGE8L3N0cm9uZz48YmxvY2txdW90ZT7CqyR7ZXNjYXBlSFRNTCh4LmxlZ2FsKX3CuzwvYmxvY2txdW90ZT48ZGl2IGNsYXNzPSJsZWdhbC1zb3VyY2UiPiR7ZXNjYXBlSFRNTCh4LmxlZ2FsU291cmNlKX08L2Rpdj4ke3gubGVnYWxDb250ZXh0P2A8ZGl2IGNsYXNzPSJsZWdhbC1jYXZlYXQiPiR7ZXNjYXBlSFRNTCh4LmxlZ2FsQ29udGV4dCl9PC9kaXY+YDonJ30ke3gubGVnYWxDYXZlYXQ/YDxkaXYgY2xhc3M9ImxlZ2FsLWNhdmVhdCI+JHtlc2NhcGVIVE1MKHgubGVnYWxDYXZlYXQpfTwvZGl2PmA6Jyd9PC9kaXY+PGRpdiBjbGFzcz0ibGVnYWwtbm90ZSI+QWp1ZGEgZGUgY29uc3VsdGEgb3BlcmF0aXZhLiBWZXJpZmljYSBzZW1wcmUgZWwgdGV4dCBvZmljaWFsIHZpZ2VudC4gPGEgaHJlZj0iJHtjZmcub2ZmaWNpYWx9IiB0YXJnZXQ9Il9ibGFuayIgcmVsPSJub29wZW5lciI+Q29uc3VsdGFyIGxhIGZvbnQgb2ZpY2lhbDwvYT4uPC9kaXY+PC9kaXY+PC9kaXY+YH0KZnVuY3Rpb24gbW9iaWxlUmVuZGVyUmVzdWx0cyhpZCl7CmlmKCFpc01vYmlsZSgpKXJldHVybiBkZXNrdG9wUmVuZGVyUmVzdWx0cyhpZCk7CmNvbnN0IGNmZz1DT05GSUdbaWRdLHE9bm9ybWFsaXplKGRvY3VtZW50LmdldEVsZW1lbnRCeUlkKGNmZy5zZWFyY2gpLnZhbHVlLnRyaW0oKSk7CmNvbnN0IGZpbHRlcmVkPWNmZy5kYXRhLmZpbHRlcih4PT4hcXx8bm9ybWFsaXplKGAke3guYXJ0aWNsZX0gJHt4LnRleHR9ICR7eC5zZXZlcml0eX0gJHt4LmNhdGVnb3J5fSAke3gua2V5d29yZHN8fCcnfWApLmluY2x1ZGVzKHEpKTsKZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoY2ZnLmNvdW50KS50ZXh0Q29udGVudD1gJHtmaWx0ZXJlZC5sZW5ndGh9IGluZnJhY2Npb25zYDsKY29uc3Qgcm9vdD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZChjZmcucmVzdWx0cyk7aWYoIWZpbHRlcmVkLmxlbmd0aCl7cm9vdC5pbm5lckhUTUw9JzxkaXYgY2xhc3M9ImVtcHR5Ij5ObyBz4oCZaGFuIHRyb2JhdCBpbmZyYWNjaW9ucyBhbWIgYXF1ZXN0cyBjcml0ZXJpcy48L2Rpdj4nO3JldHVybn0KbGV0IG49MDtjb25zdCBncm91cHM9Wy4uLm5ldyBTZXQoZmlsdGVyZWQubWFwKHg9PnguY2F0ZWdvcnkpKV0uc29ydCgoYSxiKT0+YS5sb2NhbGVDb21wYXJlKGIsJ2NhJykpOwpyb290LmlubmVySFRNTD1ncm91cHMubWFwKChnLGkpPT57Y29uc3Qgcm93cz1maWx0ZXJlZC5maWx0ZXIoeD0+eC5jYXRlZ29yeT09PWcpLnNvcnQoKGEsYik9PlN0cmluZyhhLmFydGljbGUpLmxvY2FsZUNvbXBhcmUoU3RyaW5nKGIuYXJ0aWNsZSksJ2NhJyx7bnVtZXJpYzp0cnVlfSkpLGtleT1ub3JtYWxpemUoZykucmVwbGFjZSgvW15hLXowLTldKy9nLCctJykrJy0nK2ksb3Blbj1xfHxvcGVuR3JvdXBzW2lkXS5oYXMoa2V5KSxjb250ZW50PXJvd3MubWFwKHg9PmNhcmQoaWQseCxuKyssY2ZnKSkuam9pbignJyk7cmV0dXJuIGA8ZGl2IGNsYXNzPSJncm91cCI+PGJ1dHRvbiBjbGFzcz0ibW9iaWxlLWdyb3VwLXRvZ2dsZSAke29wZW4/J2FjdGl2ZSc6Jyd9IiBvbmNsaWNrPSJ0b2dnbGVNb2JpbGVHcm91cCgnJHtpZH0nLCcke2tleX0nKSI+PHNwYW4gY2xhc3M9Im1vYmlsZS1ncm91cC1uYW1lIj4ke2VzY2FwZUhUTUwoZyl9PC9zcGFuPjxzcGFuIGNsYXNzPSJtb2JpbGUtZ3JvdXAtaW5mbyI+PHNwYW4gY2xhc3M9Im1vYmlsZS1ncm91cC1jb3VudCI+JHtyb3dzLmxlbmd0aH08L3NwYW4+PHNwYW4+4pa8PC9zcGFuPjwvc3Bhbj48L2J1dHRvbj48ZGl2IGNsYXNzPSJtb2JpbGUtZ3JvdXAtY29udGVudCAke29wZW4/J29wZW4nOicnfSI+JHtjb250ZW50fTwvZGl2PjwvZGl2PmB9KS5qb2luKCcnKTsKfQpyZW5kZXJSZXN1bHRzPWlkPT5pc01vYmlsZSgpP21vYmlsZVJlbmRlclJlc3VsdHMoaWQpOmRlc2t0b3BSZW5kZXJSZXN1bHRzKGlkKTsKfSkoKTsKPC9zY3JpcHQ+
         run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          p=Path('index.html')
-          s=p.read_text(encoding='utf-8')
-          marker='<!-- MOBILE_ACCORDION_V1 -->'
-          if marker in s:
-              print('Mobile accordion already applied')
-              raise SystemExit(0)
-          addon=r'''
-<!-- MOBILE_ACCORDION_V1 -->
-<style>
-@media (max-width:700px){
-  /* Mòbil: mantenim el cercador però substituïm les bombolles per grups plegables */
-  #omc .filters,#animals .filters{display:none!important}
-  #omc .toolbar,#animals .toolbar{position:static;padding:0;background:transparent;border:0;box-shadow:none;margin-bottom:12px}
-  #omc .search,#animals .search{margin-bottom:6px;background:#fff}
-  #omc .count,#animals .count{text-align:right;margin:6px 2px 12px}
-  #omc .group,#animals .group{margin:10px 0}
-  #omc .group-title,#animals .group-title{display:none}
-  .mobile-group-toggle{width:100%;border:1px solid #dfe4ea;background:#fff;border-radius:12px;padding:15px 16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;color:#172554;text-align:left;box-shadow:0 2px 8px rgba(0,0,0,.03)}
-  .mobile-group-toggle.active{background:#eef2ff;border-color:#172554}
-  .mobile-group-name{font-size:17px;font-weight:800;line-height:1.25}
-  .mobile-group-info{display:flex;align-items:center;gap:10px;color:#667085;font-size:13px;white-space:nowrap}
-  .mobile-group-count{background:#edf2ff;color:#223b82;border-radius:999px;padding:5px 9px;font-weight:800}
-  .mobile-group-chevron{font-size:16px;transition:transform .2s}
-  .mobile-group-toggle.active .mobile-group-chevron{transform:rotate(180deg)}
-  .mobile-group-content{display:none;margin-top:8px}
-  .mobile-group-content.open{display:block}
-  .infraction-head{grid-template-columns:1fr}
-  .meta{justify-content:flex-start}
-}
-@media (min-width:701px){.mobile-group-toggle{display:none!important}.mobile-group-content{display:block!important}}
-</style>
-<script>
-(function(){
-  const desktopRenderResults=renderResults;
-  const isMobile=()=>window.matchMedia('(max-width:700px)').matches;
-  const mobileOpenGroups={omc:new Set(),animals:new Set()};
-
-  function toggleMobileGroup(id,key){
-    const set=mobileOpenGroups[id];
-    set.has(key)?set.delete(key):set.add(key);
-    mobileRenderResults(id);
-  }
-  window.toggleMobileGroup=toggleMobileGroup;
-
-  function mobileRenderResults(id){
-    if(!isMobile()){desktopRenderResults(id);return}
-    const cfg=CONFIG[id], q=normalize(document.getElementById(cfg.search).value.trim());
-    const filtered=cfg.data.filter(x=>{const hay=normalize(`${x.article} ${x.text} ${x.severity} ${x.category} ${x.keywords||''}`);return !q||hay.includes(q)});
-    document.getElementById(cfg.count).textContent=`${filtered.length} infraccions`;
-    const root=document.getElementById(cfg.results);
-    if(!filtered.length){root.innerHTML='<div class="empty">No s’han trobat infraccions amb aquests criteris.</div>';return}
-    const groups=[...new Set(filtered.map(x=>x.category))].sort((a,b)=>a.localeCompare(b,'ca'));
-    let n=0;
-    root.innerHTML=groups.map((g,gi)=>{
-      const rows=filtered.filter(x=>x.category===g).sort((a,b)=>String(a.article).localeCompare(String(b.article),'ca',{numeric:true}));
-      const key=normalize(g).replace(/[^a-z0-9]+/g,'-')+'-'+gi;
-      /* En una cerca obrim automàticament els grups amb coincidències; sense cerca, tots comencen tancats. */
-      const open=q?true:mobileOpenGroups[id].has(key);
-      const content=rows.map(x=>{const detailId=`detail-${id}-m-${n++}`;return `<div class="infraction"><div class="infraction-head" onclick="toggleDetail('${detailId}')"><div class="art">Art. ${escapeHTML(x.article)}</div><div class="statement">${escapeHTML(x.text)}</div><div class="meta"><span class="badge ${severityClass(x.severity)}">${x.severity}</span><span class="badge money">mín. ${Number(x.min).toLocaleString('ca-ES',{minimumFractionDigits:Number(x.min)%1?2:0,maximumFractionDigits:2})} €</span></div></div><div class="detail" id="${detailId}"><strong>Significat pràctic i elements a comprovar</strong><p>${escapeHTML(x.guidance)}</p>${x.regime?`<div class="legal-source">Règim aplicable: ${escapeHTML(x.regime)}</div>`:''}<div class="legal-box"><strong>Text literal que tipifica la conducta</strong><blockquote>«${escapeHTML(x.legal)}»</blockquote><div class="legal-source">${escapeHTML(x.legalSource)}</div>${x.legalContext?`<div class="legal-caveat">${escapeHTML(x.legalContext)}</div>`:''}${x.legalCaveat?`<div class="legal-caveat">${escapeHTML(x.legalCaveat)}</div>`:''}</div><div class="legal-note">Ajuda de consulta operativa. Verifica sempre el text oficial vigent, la normativa sectorial aplicable i la competència sancionadora. <a href="${cfg.official}" target="_blank" rel="noopener">Consultar la font oficial</a>.</div></div></div>`}).join('');
-      return `<div class="group"><button class="mobile-group-toggle ${open?'active':''}" onclick="toggleMobileGroup('${id}','${key}')"><span class="mobile-group-name">${escapeHTML(g)}</span><span class="mobile-group-info"><span class="mobile-group-count">${rows.length}</span><span class="mobile-group-chevron">▼</span></span></button><div class="mobile-group-content ${open?'open':''}">${content}</div></div>`;
-    }).join('');
-  }
-
-  renderResults=function(id){isMobile()?mobileRenderResults(id):desktopRenderResults(id)};
-  window.addEventListener('resize',()=>{
-    const visible=Object.keys(CONFIG).find(id=>document.getElementById(id).style.display==='block');
-    if(visible) render(visible);
-  });
-})();
-</script>
-'''
-          s=s.replace('</body>', addon+'\n</body>')
-          p.write_text(s,encoding='utf-8')
-          PY
-      - name: Commit responsive mobile layout
+          python3 -c "import os,base64,pathlib; p=pathlib.Path('index.html'); s=p.read_text(encoding='utf-8'); a=base64.b64decode(os.environ['MOBILE_ADDON_B64']).decode(); p.write_text(s if 'MOBILE_ACCORDION_V1' in s else s.replace('</body>',a+'\\n</body>'),encoding='utf-8')"
+      - name: Commit
         run: |
           if git diff --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
