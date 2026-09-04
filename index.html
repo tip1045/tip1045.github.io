@@ -124,10 +124,10 @@ function toggleDetail(i){document.getElementById("detail-"+i).classList.toggle("
 function renderResults(){
  const q=normalize(document.getElementById("search").value.trim());
  const filtered=DATA.filter(x=>{
-   // Cerca només dins del contingut propi i consultable d'aquesta infracció.
-   // No fem servir l'antic resum compartit per article perquè podia contenir
-   // conceptes corresponents a una altra fila del mateix article.
-   const hay=normalize(`${x.article} ${x.text} ${x.severity} ${x.category} ${x.guidance} ${x.legal} ${x.legalSource} ${x.legalContext||""}`);
+   // Cerca estricta sobre les dades identificatives de la infracció. Això evita
+   // resultats incidentals perquè una paraula aparegui només en una explicació,
+   // un exemple, una comprovació recomanada o el context jurídic secundari.
+   const hay=normalize(`${x.article} ${x.text} ${x.severity} ${x.category}`);
    return (selectedCategories.size===0||selectedCategories.has(x.category)) && (!q||hay.includes(q));
  });
  document.getElementById("count").textContent=`${filtered.length} infraccions`;
