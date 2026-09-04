@@ -47,6 +47,7 @@ footer{text-align:center;color:#98a2b3;font-size:12px;padding:38px 15px}
   <div class="menu">
     <div class="card" onclick="openSection('omc')"><h2>OMC</h2><p class="muted">Ordenança de Convivència i Espai Públic d’Alella</p></div>
     <div class="card" onclick="openSection('animals')"><h2>OM Animals</h2><p class="muted">Ordenança municipal relativa als animals domèstics d’Alella</p></div>
+    <div class="card" onclick="openSection('circulacio')"><h2>Circulació Alella</h2><p class="muted">Normativa municipal de circulació i mobilitat d’Alella</p></div>
   </div>
 </div>
 
@@ -75,6 +76,11 @@ footer{text-align:center;color:#98a2b3;font-size:12px;padding:38px 15px}
   <div class="legend">Els mínims varien segons el règim aplicable. Cada fitxa mostra la quantia mínima corresponent de l’article 70.</div>
   <div id="results-animals"></div>
 </section>
+
+<section id="circulacio" class="section">
+  <span class="back" onclick="goBack()">← Tornar</span>
+  <div class="card"><h2>Circulació Alella</h2><p class="muted">Secció preparada per incorporar les infraccions municipals de circulació i mobilitat.</p></div>
+</section>
 </main>
 <footer>TIP 1045 · Eina de consulta · Verificar sempre la norma vigent abans de formular denúncia</footer>
 
@@ -91,7 +97,7 @@ function openSection(id){
  document.getElementById("mainMenu").style.display="none";
  document.querySelectorAll(".section").forEach(s=>s.style.display="none");
  document.getElementById(id).style.display="block";
- render(id);
+ if(CONFIG[id]) render(id);
 }
 function goBack(){document.querySelectorAll(".section").forEach(s=>s.style.display="none");document.getElementById("mainMenu").style.display="block"}
 function normalize(s){return String(s??"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"")}
